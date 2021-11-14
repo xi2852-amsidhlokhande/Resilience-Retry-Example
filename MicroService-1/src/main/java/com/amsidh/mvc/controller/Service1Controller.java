@@ -40,11 +40,14 @@ public class Service1Controller {
     }
 
 
+
+    @io.github.resilience4j.retry.annotation.Retry(name = "service1")
+    @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "service1")
     @GetMapping("/{service1Id}")
     public ResponseService1 getService1ById(@PathVariable("service1Id") Integer service1Id) {
         log.info("Inside getService1ById method of Service1Controller");
         Service1 service1 = service1Service.getService1ById(service1Id);
-        return ResponseService1.builder().service2(getResponseService2Test(service1.getService1Id()))
+        return ResponseService1.builder().service2(getResponseService2(service1.getService1Id()))
                 .service1Id(service1.getService1Id())
                 .service1Message(service1.getService1Message())
                 .build();
@@ -73,7 +76,7 @@ public class Service1Controller {
         return circuitBreakerSupplier.get();
     }
 
-    public ResponseService2 getResponseService2(Integer service2Id) {
+    private ResponseService2 getResponseService2(Integer service2Id) {
 
         log.info("Inside getResponseService2 method calling MicroService-2 API");
         ResponseEntity<ResponseService2> responseService2ResponseEntity = this.restTemplate.getForEntity(SERVICE2_URL + "/" + service2Id, ResponseService2.class);
