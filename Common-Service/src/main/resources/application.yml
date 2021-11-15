@@ -14,14 +14,24 @@ resilience4j:
     instances:
       service1:
         baseConfig: default
+        result-predicate: com.amsidh.mvc.result.predicate.Service1ResultPredicate
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service1ExceptionPredicate          
       service2:
         baseConfig: default
+        result-predicate: com.amsidh.mvc.result.predicate.Service2ResultPredicate
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service2ExceptionPredicate
       service3:
         baseConfig: default
+        result-predicate: com.amsidh.mvc.result.predicate.Service3ResultPredicate
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service3ExceptionPredicate
       service4:
         baseConfig: default
+        result-predicate: com.amsidh.mvc.result.predicate.Service4ResultPredicate
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service4ExceptionPredicate
       service5:
         baseConfig: default
+        result-predicate: com.amsidh.mvc.result.predicate.Service5ResultPredicate
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service5ExceptionPredicate
 
   circuitbreaker:
     configs:
@@ -35,16 +45,19 @@ resilience4j:
     instances:
       service1:
         baseConfig: default
+        record-failure-predicate: com.amsidh.mvc.exception.predicate.Service1ExceptionPredicate
       service2:
         baseConfig: default
+        record-failure-predicate: com.amsidh.mvc.exception.predicate.Service2ExceptionPredicate
       service3:
         baseConfig: default
+        record-failure-predicate: com.amsidh.mvc.exception.predicate.Service3ExceptionPredicate
       service4:
         baseConfig: default
+        record-failure-predicate: com.amsidh.mvc.exception.predicate.Service4ExceptionPredicate
       service5:
         baseConfig: default
-
-
+        record-failure-predicate: com.amsidh.mvc.exception.predicate.Service5ExceptionPredicate
 
   bulkhead:
     configs:
