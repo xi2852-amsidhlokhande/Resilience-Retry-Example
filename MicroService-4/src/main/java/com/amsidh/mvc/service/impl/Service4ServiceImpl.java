@@ -15,7 +15,6 @@ public class Service4ServiceImpl implements Service4Service {
 
     @Override
     public Service4 getService4ById(Integer service4Id) {
-        log.info("Inside getService4ById method Service4ServiceImpl");
         return service4Repository.findById(service4Id).orElseThrow();
     }
 }

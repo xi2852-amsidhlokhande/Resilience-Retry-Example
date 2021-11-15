@@ -34,7 +34,8 @@ public class Service5Controller {
         log.info("Inside getService5ById method of Service5Controller");
         // simulate failure
         int random = ThreadLocalRandom.current().nextInt(1, 4);
-        if (random < 3) {
+        log.info("Random Value "+ random);
+        if (random < 3.75) {
             return ResponseEntity.status(500).build();
         } else {
             Service5 service5 = service5Service.getService5ById(service5Id);

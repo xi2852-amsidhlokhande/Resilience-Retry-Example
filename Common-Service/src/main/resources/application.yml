@@ -2,10 +2,11 @@ resilience4j:
   retry:
     configs:
       default:
-        maxAttempts: 3
-        waitDuration: 1s
-        enableExponentialBackoff: true
-        exponentialBackoffMultiplier: 2
+        maxAttempts: 5
+        waitDuration: 5s
+#        enableExponentialBackoff: true
+#        exponentialBackoffMultiplier: 2
+#        exponentialMaxWaitDuration: 20s
         retryExceptions:
           - org.springframework.web.client.ResourceAccessException
           - java.io.IOException
@@ -31,12 +32,10 @@ resilience4j:
   circuitbreaker:
     configs:
       default:
-        minimum-number-of-calls: 10
+        minimum-number-of-calls: 10 #The number of calls after which the error rate is calculated. I have assigned it with a small value for test purpose.
         permittedNumberOfCallsInHalfOpenState: 2
-        waitDurationInOpenState: 5000 #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        waitDurationInOpenState: 60000 #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
         failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
-        eventConsumerBufferSize: 10
-        registerHealthIndicator: true
     instances:
       service1:
         baseConfig: default
