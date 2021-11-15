@@ -3,7 +3,6 @@ package com.amsidh.mvc.controller;
 import com.amsidh.mvc.domain.ResponseService1;
 import com.amsidh.mvc.domain.ResponseService2;
 import com.amsidh.mvc.entities.Service1;
-import com.amsidh.mvc.exception.predicate.Service1ExceptionPredicate;
 import com.amsidh.mvc.service.Service1Service;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.decorators.Decorators;
@@ -26,8 +25,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
 @RestController
