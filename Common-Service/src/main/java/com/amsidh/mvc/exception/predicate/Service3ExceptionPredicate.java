@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Service3ExceptionPredicate implements Predicate<Throwable> {
     @Override
     public boolean test(Throwable throwable) {
-    	log.info("Inside test method of HttpServerErrorPredicate");
+    	log.debug("Inside test method of HttpServerErrorPredicate");
         if (throwable instanceof HttpServerErrorException) {
             HttpServerErrorException httpServerErrorException = (HttpServerErrorException) throwable;
             if (httpServerErrorException.getStatusCode().is4xxClientError()) {

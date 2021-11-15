@@ -1,6 +1,6 @@
 package com.amsidh.mvc.controller;
 
-import com.amsidh.mvc.exception.ErrorMessage;
+import com.amsidh.mvc.domain.ErrorMessage;
 import com.amsidh.mvc.exception.Service4NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

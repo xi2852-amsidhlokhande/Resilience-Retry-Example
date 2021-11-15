@@ -2,8 +2,8 @@ resilience4j:
   retry:
     configs:
       default:
-        maxAttempts: 5
-        waitDuration: 5s
+        maxAttempts: 3
+        waitDuration: 1s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
         retryExceptions:
@@ -14,32 +14,27 @@ resilience4j:
     instances:
       service1:
         baseConfig: default
-        result-predicate: com.amsidh.mvc.result.predicate.Service1ResultPredicate
-        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service1ExceptionPredicate          
+        retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service1ExceptionPredicate
       service2:
         baseConfig: default
-        result-predicate: com.amsidh.mvc.result.predicate.Service2ResultPredicate
         retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service2ExceptionPredicate
       service3:
         baseConfig: default
-        result-predicate: com.amsidh.mvc.result.predicate.Service3ResultPredicate
         retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service3ExceptionPredicate
       service4:
         baseConfig: default
-        result-predicate: com.amsidh.mvc.result.predicate.Service4ResultPredicate
         retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service4ExceptionPredicate
       service5:
         baseConfig: default
-        result-predicate: com.amsidh.mvc.result.predicate.Service5ResultPredicate
         retry-exception-predicate: com.amsidh.mvc.exception.predicate.Service5ExceptionPredicate
 
   circuitbreaker:
     configs:
       default:
-        slidingWindowSize: 100
+        minimum-number-of-calls: 10
         permittedNumberOfCallsInHalfOpenState: 2
-        waitDurationInOpenState: 1s
-        failureRateThreshold: 10 # percentage
+        waitDurationInOpenState: 5000 #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
         eventConsumerBufferSize: 10
         registerHealthIndicator: true
     instances:

@@ -15,21 +15,10 @@ import java.util.List;
 @Slf4j
 public class Service5ServiceImpl implements Service5Service {
     private final Service5Repository service5Repository;
-    @Override
-    public Service5 saveService5(Service5 service5) {
-        log.info("Inside saveService5 method Service5ServiceImpl");
-        return service5Repository.save(service5);
-    }
 
     @Override
     public Service5 getService5ById(Integer service5Id) {
         log.info("Inside getService5ById method Service5ServiceImpl");
-        return service5Repository.findById(service5Id).orElseThrow(()-> new Service5NotFound("Service5 not found with service5Id "+ service5Id));
-    }
-
-    @Override
-    public List<Service5> getAllService5() {
-        log.info("Inside getAllService5 method Service5ServiceImpl");
-        return service5Repository.findAll();
+        return service5Repository.findById(service5Id).orElseThrow(() -> new Service5NotFound("Service5 not found with service5Id " + service5Id));
     }
 }

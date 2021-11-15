@@ -1,6 +1,6 @@
 package com.amsidh.mvc.controller;
 
-import com.amsidh.mvc.exception.ErrorMessage;
+import com.amsidh.mvc.domain.ErrorMessage;
 import com.amsidh.mvc.exception.Service5NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,8 +13,8 @@ import java.util.Date;
 public class Service5AdviceController {
 
     @ExceptionHandler(value = {Service5NotFound.class})
-    public ErrorMessage handleService5NotFoundException(Service5NotFound service5NotFound, WebRequest webRequest){
-       return ErrorMessage.builder()
+    public ErrorMessage handleService5NotFoundException(Service5NotFound service5NotFound, WebRequest webRequest) {
+        return ErrorMessage.builder()
                 .message(service5NotFound.getMessage())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .timestamp(new Date())
