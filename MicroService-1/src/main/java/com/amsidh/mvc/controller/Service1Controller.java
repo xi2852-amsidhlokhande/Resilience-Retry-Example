@@ -7,6 +7,7 @@ import com.amsidh.mvc.service.Service1Service;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.fallback.FallbackDecorators;
 import io.github.resilience4j.retry.Retry;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,6 @@ public class Service1Controller {
     }
 
 
-
     @io.github.resilience4j.retry.annotation.Retry(name = "service1")
     @io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker(name = "service1")
     @GetMapping("/{service1Id}")
@@ -52,6 +52,17 @@ public class Service1Controller {
                 .service1Message(service1.getService1Message())
                 .build();
     }
+
+    @GetMapping("/supplier/{service1Id}")
+    public ResponseService1 getService1ByIdSupplier(@PathVariable("service1Id") Integer service1Id) {
+        log.info("Inside getService1ById method of Service1Controller");
+        Service1 service1 = service1Service.getService1ById(service1Id);
+        return ResponseService1.builder().service2(getResponseService2Test(service1.getService1Id()))
+                .service1Id(service1.getService1Id())
+                .service1Message(service1.getService1Message())
+                .build();
+    }
+
 
     @PostMapping
     public ResponseService1 saveService1(@RequestBody @Valid Service1 service1) {
@@ -68,12 +79,21 @@ public class Service1Controller {
     private final static String SERVICE2_URL = "http://localhost:8082/service2";
 
     public ResponseService2 getResponseService2Test(Integer service2Id) {
-        Retry retry= Retry.ofDefaults("service1");
+        Retry retry = Retry.ofDefaults("service1");
         CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("service1");
 
-        Supplier<ResponseService2> retryingSupplier= Retry.decorateSupplier(retry,()-> getResponseService2(service2Id));
-        Supplier<ResponseService2> circuitBreakerSupplier=CircuitBreaker.decorateSupplier(circuitBreaker, retryingSupplier);
-        return circuitBreakerSupplier.get();
+        Supplier<ResponseService2> responseService2Supplier = () -> getResponseService2(service2Id);
+
+        responseService2Supplier = CircuitBreaker.decorateSupplier(circuitBreaker, responseService2Supplier);
+        // they know what to do with it
+        circuitBreaker.getEventPublisher()
+                .onError(event -> log.info("We have problem"));
+
+        responseService2Supplier = Retry.decorateSupplier(retry, responseService2Supplier);
+
+
+        return Try.ofSupplier(responseService2Supplier)
+                .recover(throwable -> null).get();
     }
 
     private ResponseService2 getResponseService2(Integer service2Id) {
