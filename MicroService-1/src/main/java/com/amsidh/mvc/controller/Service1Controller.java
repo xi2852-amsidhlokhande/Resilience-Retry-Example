@@ -35,7 +35,8 @@ public class Service1Controller {
     private final RetryRegistry retryRegistry;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
-    private int requestCount= 0;
+    private int requestCount = 0;
+
     @GetMapping("/{service1Id}")
     public ResponseService1 getService1ById(@PathVariable("service1Id") Integer service1Id) {
         log.info("Request No- " + requestCount++);
@@ -53,7 +54,7 @@ public class Service1Controller {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("service1");
         log.info("Calling MicroService-2 API");
         Supplier<ResponseService2> responseService2Supplier = () -> {
-            ResponseEntity<ResponseService2> responseService2ResponseEntity= this.restTemplate.getForEntity(SERVICE2_URL + "/" + service2Id, ResponseService2.class);
+            ResponseEntity<ResponseService2> responseService2ResponseEntity = this.restTemplate.getForEntity(SERVICE2_URL + "/" + service2Id, ResponseService2.class);
             return responseService2ResponseEntity.getBody();
         };
         responseService2Supplier = Decorators.ofSupplier(responseService2Supplier)

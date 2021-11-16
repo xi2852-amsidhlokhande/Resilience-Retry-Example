@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ResponseService1 {
-     private Integer service1Id;
-     private String service1Message;
-     private ResponseService2 service2;
+    private Integer service1Id;
+    private String service1Message;
+    private ResponseService2 service2;
 }

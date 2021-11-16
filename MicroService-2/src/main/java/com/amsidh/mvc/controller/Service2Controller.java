@@ -1,7 +1,6 @@
 package com.amsidh.mvc.controller;
 
 import com.amsidh.mvc.domain.ResponseService2;
-import com.amsidh.mvc.domain.ResponseService2;
 import com.amsidh.mvc.domain.ResponseService3;
 import com.amsidh.mvc.entities.Service2;
 import com.amsidh.mvc.service.Service2Service;
@@ -37,6 +36,7 @@ public class Service2Controller {
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
     private int requestCount = 0;
+
     @GetMapping("/{service2Id}")
     public ResponseService2 getService2ById(@PathVariable("service2Id") Integer service2Id) {
         log.info("Request No- " + requestCount++);
@@ -54,7 +54,7 @@ public class Service2Controller {
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("service2");
         log.info("Calling MicroService-3 API");
         Supplier<ResponseService3> responseService3Supplier = () -> {
-            ResponseEntity<ResponseService3> responseService3ResponseEntity= this.restTemplate.getForEntity(SERVICE3_URL + "/" + service2Id, ResponseService3.class);
+            ResponseEntity<ResponseService3> responseService3ResponseEntity = this.restTemplate.getForEntity(SERVICE3_URL + "/" + service2Id, ResponseService3.class);
             return responseService3ResponseEntity.getBody();
         };
         responseService3Supplier = Decorators.ofSupplier(responseService3Supplier)

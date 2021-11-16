@@ -1,8 +1,6 @@
 package com.amsidh.mvc.controller;
 
 import com.amsidh.mvc.domain.ResponseService3;
-import com.amsidh.mvc.domain.ResponseService3;
-import com.amsidh.mvc.domain.ResponseService3;
 import com.amsidh.mvc.domain.ResponseService4;
 import com.amsidh.mvc.entities.Service3;
 import com.amsidh.mvc.service.Service3Service;
@@ -38,6 +36,7 @@ public class Service3Controller {
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
     private int requestCount = 0;
+
     @GetMapping("/{service3Id}")
     public ResponseService3 getService3ById(@PathVariable("service3Id") Integer service3Id) {
         log.info("Request No- " + requestCount++);

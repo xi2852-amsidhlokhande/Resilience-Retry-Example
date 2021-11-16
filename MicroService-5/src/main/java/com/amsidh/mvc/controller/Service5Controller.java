@@ -2,21 +2,17 @@ package com.amsidh.mvc.controller;
 
 import com.amsidh.mvc.domain.ResponseService5;
 import com.amsidh.mvc.entities.Service5;
-import com.amsidh.mvc.exception.Service5NotFound;
 import com.amsidh.mvc.service.Service5Service;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,11 +25,11 @@ public class Service5Controller {
     private int requestCount = 0;
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ResponseService5> getService5ById(@PathVariable("service5Id") Integer service5Id){
+    public ResponseEntity<ResponseService5> getService5ById(@PathVariable("service5Id") Integer service5Id) {
         log.info("Request No- " + requestCount++);
         // simulate failure
         int random = ThreadLocalRandom.current().nextInt(1, 4);
-        log.info("Random Value "+ random);
+        log.info("Random Value " + random);
         if (random < 1) {
             return ResponseEntity.status(500).build();
         } else {

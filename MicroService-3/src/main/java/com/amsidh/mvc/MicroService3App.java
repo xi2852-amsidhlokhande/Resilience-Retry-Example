@@ -13,18 +13,18 @@ import java.util.Arrays;
 @SpringBootApplication
 public class MicroService3App implements CommandLineRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MicroService3App.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MicroService3App.class, args);
+    }
 
-	private final Service3Repository Service3Repository;
+    private final Service3Repository Service3Repository;
 
-	@Override
-	public void run(String... args) throws Exception {
-		Service3Repository.saveAll(Arrays.asList(
-				Service3.builder().service3Message("Service3 Message1").build(),
-				Service3.builder().service3Message("Service3 Message2").build(),
-				Service3.builder().service3Message("Service3 Message3").build()
-		));
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        Service3Repository.saveAll(Arrays.asList(
+                Service3.builder().service3Message("Service3 Message1").build(),
+                Service3.builder().service3Message("Service3 Message2").build(),
+                Service3.builder().service3Message("Service3 Message3").build()
+        ));
+    }
 }

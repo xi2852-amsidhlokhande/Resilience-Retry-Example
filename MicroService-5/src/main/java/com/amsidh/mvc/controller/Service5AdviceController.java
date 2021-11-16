@@ -23,7 +23,7 @@ public class Service5AdviceController {
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
-    public ErrorMessage handleRuntimeException(RuntimeException exception, WebRequest webRequest){
+    public ErrorMessage handleRuntimeException(RuntimeException exception, WebRequest webRequest) {
         return ErrorMessage.builder()
                 .message(exception.getMessage())
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())

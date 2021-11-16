@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class Service3ServiceImpl implements Service3Service {
     private final Service3Repository service3Repository;
+
     @Override
     public Service3 getService3ById(Integer service3Id) {
         log.info("Inside getService3ById method Service3ServiceImpl class");

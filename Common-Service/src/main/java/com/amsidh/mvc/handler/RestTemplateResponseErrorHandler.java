@@ -1,15 +1,14 @@
 package com.amsidh.mvc.handler;
 
-import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
+
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
     @Override
@@ -26,7 +25,7 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
                 .series() == HttpStatus.Series.SERVER_ERROR) {
             throw new RuntimeException(httpResponse.getStatusText());
         } else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
-                throw new RuntimeException(httpResponse.getStatusText());
+            throw new RuntimeException(httpResponse.getStatusText());
         }
     }
 }

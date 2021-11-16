@@ -13,8 +13,8 @@ import java.util.Date;
 public class Service3AdviceController {
 
     @ExceptionHandler(value = {Service3NotFound.class})
-    public ErrorMessage handleService3NotFoundException(Service3NotFound service3NotFound, WebRequest webRequest){
-       return ErrorMessage.builder()
+    public ErrorMessage handleService3NotFoundException(Service3NotFound service3NotFound, WebRequest webRequest) {
+        return ErrorMessage.builder()
                 .message(service3NotFound.getMessage())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .timestamp(new Date())
@@ -23,7 +23,7 @@ public class Service3AdviceController {
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
-    public ErrorMessage handleRuntimeException(RuntimeException exception, WebRequest webRequest){
+    public ErrorMessage handleRuntimeException(RuntimeException exception, WebRequest webRequest) {
         return ErrorMessage.builder()
                 .message(exception.getMessage())
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
