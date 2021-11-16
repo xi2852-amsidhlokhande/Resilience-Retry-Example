@@ -2,9 +2,6 @@ package com.amsidh.mvc.exception.predicate;
 
 import java.util.function.Predicate;
 
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

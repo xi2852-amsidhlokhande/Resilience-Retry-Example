@@ -3,15 +3,16 @@ resilience4j:
     configs:
       default:
         maxAttempts: 5
-        waitDuration: 5s
-#        enableExponentialBackoff: true
-#        exponentialBackoffMultiplier: 2
-#        exponentialMaxWaitDuration: 20s
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        exponentialMaxWaitDuration: 10s
         retryExceptions:
           - org.springframework.web.client.ResourceAccessException
           - java.io.IOException
           - org.springframework.web.client.HttpServerErrorException
-
+        ignoreExceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
     instances:
       service1:
         baseConfig: default
@@ -32,10 +33,14 @@ resilience4j:
   circuitbreaker:
     configs:
       default:
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
         minimum-number-of-calls: 10 #The number of calls after which the error rate is calculated. I have assigned it with a small value for test purpose.
-        permittedNumberOfCallsInHalfOpenState: 2
-        waitDurationInOpenState: 60000 #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
         failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
+        register-health-indicator: true
+        automatic-transition-from-open-to-half-open-enabled: true
     instances:
       service1:
         baseConfig: default
@@ -52,56 +57,3 @@ resilience4j:
       service5:
         baseConfig: default
         record-failure-predicate: com.amsidh.mvc.exception.predicate.Service5ExceptionPredicate
-
-  bulkhead:
-    configs:
-      default:
-        maxConcurrentCalls: 10
-    instances:
-      service1:
-        baseConfig: default
-      service2:
-        baseConfig: default
-      service3:
-        baseConfig: default
-      service4:
-        baseConfig: default
-      service5:
-        baseConfig: default
-
-  ratelimiter:
-    configs:
-      default:
-        limitForPeriod: 10
-        limitRefreshPeriod: 1s
-        timeoutDuration: 0
-        registerHealthIndicator: true
-        eventConsumerBufferSize: 100
-    instances:
-      service1:
-        baseConfig: default
-      service2:
-        baseConfig: default
-      service3:
-        baseConfig: default
-      service4:
-        baseConfig: default
-      service5:
-        baseConfig: default
-
-  timelimiter:
-    configs:
-      default:
-        timeoutDuration: 2s
-        cancelRunningFuture: true
-    instances:
-      service1:
-        baseConfig: default
-      service2:
-        baseConfig: default
-      service3:
-        baseConfig: default
-      service4:
-        baseConfig: default
-      service5:
-        baseConfig: default
