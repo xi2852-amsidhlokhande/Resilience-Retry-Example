@@ -37,6 +37,11 @@ public class Service1Controller {
 
     private int requestCount = 0;
 
+    @GetMapping
+    public String sayHello(){
+        return "!!!!Hello World!!!!";
+    }
+
     @GetMapping("/{service1Id}")
     public ResponseService1 getService1ById(@PathVariable("service1Id") Integer service1Id) {
         log.info("Request No- " + requestCount++);
