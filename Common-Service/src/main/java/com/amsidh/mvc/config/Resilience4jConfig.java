@@ -19,20 +19,17 @@ public class Resilience4jConfig {
         return new RegistryEventConsumer<Retry>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
-                entryAddedEvent.getAddedEntry()
-                        .getEventPublisher().onEvent(event -> log.info(event.toString()));
+                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
 
             @Override
             public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
-                entryRemoveEvent.getRemovedEntry()
-                        .getEventPublisher().onEvent(event -> log.info(event.toString()));
+                //entryRemoveEvent.getRemovedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
-                entryReplacedEvent.getNewEntry()
-                        .getEventPublisher().onEvent(event -> log.info(event.toString()));
+                //entryReplacedEvent.getNewEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
         };
     }
@@ -48,12 +45,12 @@ public class Resilience4jConfig {
 
             @Override
             public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
-                entryRemoveEvent.getRemovedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
+               // entryRemoveEvent.getRemovedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-                entryReplacedEvent.getNewEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
+                //entryReplacedEvent.getNewEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
             }
         };
     }
