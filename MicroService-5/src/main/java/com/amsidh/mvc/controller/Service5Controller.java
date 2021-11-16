@@ -26,12 +26,11 @@ public class Service5Controller {
 
     private final Service5Service service5Service;
 
-    @Retry(name = "service5")
-    @CircuitBreaker(name = "service5")
-    @GetMapping("/{service5Id}")
+    private int requestCount = 0;
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ResponseService5> getService5ById(@PathVariable("service5Id") Integer service5Id){
-        log.info("Inside getService5ById method of Service5Controller");
+        log.info("Request No- " + requestCount++);
         // simulate failure
         int random = ThreadLocalRandom.current().nextInt(1, 4);
         log.info("Random Value "+ random);

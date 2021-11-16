@@ -37,9 +37,10 @@ public class Service3Controller {
     private final RetryRegistry retryRegistry;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
+    private int requestCount = 0;
     @GetMapping("/{service3Id}")
     public ResponseService3 getService3ById(@PathVariable("service3Id") Integer service3Id) {
-        log.info("Inside getService3ById method of Service3Controller");
+        log.info("Request No- " + requestCount++);
         Service3 service3 = service3Service.getService3ById(service3Id);
         ResponseService4 responseService4 = getResponseService4(service3.getService3Id());
         return ResponseService3.builder().service4(responseService4)
@@ -52,7 +53,7 @@ public class Service3Controller {
 
         Retry retry = retryRegistry.retry("service3");
         CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("service3");
-        log.info("Inside getResponseService4 method calling MicroService-4 API");
+        log.info("Calling MicroService-4 API");
         Supplier<ResponseService4> responseService4Supplier = () -> {
             ResponseEntity<ResponseService4> responseService4ResponseEntity = this.restTemplate.getForEntity(SERVICE4_URL + "/" + service3Id, ResponseService4.class);
             return responseService4ResponseEntity.getBody();
