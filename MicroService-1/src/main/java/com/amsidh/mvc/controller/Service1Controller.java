@@ -22,7 +22,7 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @Slf4j
 public class Service1Controller {
 
-    private final static String SERVICE2_URL = "http://localhost:8082/service2/sayHello3";
+    private final static String SERVICE2_URL = "http://localhost:8082/service2/sayHello4";
     private final RestTemplate restTemplate;
 
     @GetMapping("/sayHello1")
