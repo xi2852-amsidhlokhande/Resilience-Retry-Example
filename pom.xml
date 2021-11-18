@@ -6,8 +6,6 @@
         <module>MicroService-1</module>
         <module>MicroService-2</module>
         <module>MicroService-3</module>
-        <module>MicroService-4</module>
-        <module>MicroService-5</module>
         <module>Common-Service</module>
     </modules>
     <parent>
@@ -17,10 +15,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.amsidh.mvc</groupId>
-    <artifactId>Resilience-Retry-Example</artifactId>
+    <artifactId>MicroService-Demo-Example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Resilience-Retry-Example</name>
+    <name>MicroService-Demo-Example</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>16</java.version>
@@ -33,23 +31,16 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-spring-boot2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-all</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.6</version>
         </dependency>
 
         <dependency>
@@ -57,11 +48,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,10 +58,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
