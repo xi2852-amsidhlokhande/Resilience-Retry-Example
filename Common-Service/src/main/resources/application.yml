@@ -1,3 +1,31 @@
+spring:
+  main:
+    banner-mode: off
+  output:
+    ansi:
+      enabled: DETECT
+
+
+  sleuth:
+    baggage:
+      remote-fields: RequestId
+      correlation-fields:
+        - RequestId
+      tag-fields:
+        - RequestId
+    trace-id128: true
+
+
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    com.amsidh.mvc: DEBUG
+    org.hibernate: ERROR
+
+
+
 resilience4j:
   retry:
     configs:

@@ -1,31 +1,23 @@
 package com.amsidh.mvc.handler;
 
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.ExtractingResponseErrorHandler;
 
 import java.io.IOException;
+import java.net.URI;
 
-import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
-import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
+import static net.logstash.logback.argument.StructuredArguments.kv;
 
-public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
-
-    @Override
-    public boolean hasError(ClientHttpResponse httpResponse)
-            throws IOException {
-        return (httpResponse.getStatusCode().series() == CLIENT_ERROR || httpResponse.getStatusCode().series() == SERVER_ERROR);
-    }
+@Component
+@Slf4j
+public class RestTemplateResponseErrorHandler extends ExtractingResponseErrorHandler {
 
     @Override
-    public void handleError(ClientHttpResponse httpResponse)
-            throws IOException {
-
-        if (httpResponse.getStatusCode()
-                .series() == HttpStatus.Series.SERVER_ERROR) {
-            throw new RuntimeException(httpResponse.getStatusText());
-        } else if (httpResponse.getStatusCode().series() == HttpStatus.Series.CLIENT_ERROR) {
-            throw new RuntimeException(httpResponse.getStatusText());
-        }
+    public void handleError(URI url, HttpMethod method, ClientHttpResponse response) throws IOException {
+        log.error(response.getStatusCode().getReasonPhrase(), kv("status", response.getRawStatusCode()), kv("response", response));
+        super.handleError(url, method, response);
     }
 }
