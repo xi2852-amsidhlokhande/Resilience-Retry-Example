@@ -9,6 +9,10 @@ import org.springframework.cloud.sleuth.instrument.async.TraceableExecutorServic
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import brave.baggage.BaggageField;
+import brave.baggage.CorrelationScopeConfig.SingleCorrelationField;
+import brave.context.slf4j.MDCScopeDecorator;
+import brave.propagation.CurrentTraceContext.ScopeDecorator;
 import java.util.concurrent.Executors;
 
 @Configuration

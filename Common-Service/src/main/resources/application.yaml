@@ -1,0 +1,10 @@
+spring:
+  sleuth:
+    baggage:
+      remote-fields: RequestId
+      correlation-fields:
+        - RequestId
+      tag-fields:
+        - RequestId
+    trace-id128: true
+            
