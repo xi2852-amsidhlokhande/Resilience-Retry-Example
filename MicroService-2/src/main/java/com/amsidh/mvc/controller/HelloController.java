@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
@@ -35,8 +34,7 @@ public class HelloController {
                     ResponseEntity<String> forEntity = restTemplate.getForEntity(SERVICE3_URL, String.class);
                     log.info("#####################################");
                     return forEntity;
-                },
-                traceableExecutorService
+                }, traceableExecutorService
         );
 
         return "Service-2 Message-1";
