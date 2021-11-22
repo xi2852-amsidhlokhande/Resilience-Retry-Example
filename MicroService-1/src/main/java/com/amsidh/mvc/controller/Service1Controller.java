@@ -30,19 +30,9 @@ public class Service1Controller {
     public String sayHello(@RequestBody String requestBody) throws Exception {
         log.info("Calling Service2");
         try {
-
-            /*
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("x-b3-traceid", "0000000000000001");
-            headers.add("x-b3-spanid", "0000000000000002");
-            HttpEntity entity = new HttpEntity(headers);
-
-            ResponseEntity<String> responseEntityService2 = restTemplate.exchange(SERVICE2_URL, HttpMethod.GET, entity, String.class);
-
-           */
-
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(SERVICE2_URL, String.class);
             log.info("Response from Service2 is {}", responseEntity.getBody(), kv("status", responseEntity.getStatusCodeValue()));
+
         } catch (HttpClientErrorException httpClientErrorException) {
             log.error(httpClientErrorException.getMessage());
             throw httpClientErrorException;

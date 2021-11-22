@@ -2,8 +2,6 @@ package com.amsidh.mvc.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.cloud.sleuth.instrument.async.TraceableExecutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +19,6 @@ public class HelloController {
 
     private final static String SERVICE3_URL = "http://localhost:8083/service3/sayHello3";
     private final RestTemplate restTemplate;
-    private final Tracer tracer;
-    private final BeanFactory beanFactory;
     private final TraceableExecutorService traceableExecutorService;
 
     @GetMapping("/sayHello4")

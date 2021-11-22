@@ -20,18 +20,21 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @RequestMapping("/service2")
 @Slf4j
 public class Service2Controller {
-
+/*
     private final static String SERVICE3_URL = "http://localhost:8083/service3/sayHello3";
     private final RestTemplate restTemplate;
 
     @GetMapping("/sayHello2")
     public String sayHello() {
         log.info("@@@@@@@@@@@@@@@@@@ Inside sayHello method of Service2 @@@@@@@@@@@@@@@@@");
-       /* myMethod(() -> {
-            log.info("========================Calling Service3=======================");
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(SERVICE3_URL, String.class);
-            log.info("Response from Service3 is {}", responseEntity.getBody(), kv("status", responseEntity.getStatusCodeValue()));
-        });*/
+		*//*
+		 * myMethod(() -> {
+		 * log.info("========================Calling Service3=======================");
+		 * ResponseEntity<String> responseEntity =
+		 * restTemplate.getForEntity(SERVICE3_URL, String.class);
+		 * log.info("Response from Service3 is {}", responseEntity.getBody(),
+		 * kv("status", responseEntity.getStatusCodeValue())); });
+		 *//*
         return "Service-2 Message-1";
     }
 
@@ -73,5 +76,5 @@ public class Service2Controller {
                 MDC.clear();
             }
         });
-    }
+    }*/
 }

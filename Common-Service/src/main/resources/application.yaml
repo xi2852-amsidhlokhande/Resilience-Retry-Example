@@ -1,10 +1,2 @@
-spring:
-  sleuth:
-    baggage:
-      remote-fields: RequestId
-      correlation-fields:
-        - RequestId
-      tag-fields:
-        - RequestId
-    trace-id128: true
+spring:  sleuth:    baggage-keys:    - RequestId    propagation-keys:    - RequestId    keys:      http:        headers: RequestId    propagation:      tag:        whitelisted-keys:        - RequestId    log:      slf4j:        whitelisted-mdc-keys:        - RequestId               reactor:      decorate-on-each: true    trace-id128: true
             
