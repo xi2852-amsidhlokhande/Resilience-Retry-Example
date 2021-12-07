@@ -1,6 +1,7 @@
 package com.amsidh.mvc.service.impl;
 
 import com.amsidh.mvc.entities.Service2;
+import com.amsidh.mvc.exception.Service2NotFound;
 import com.amsidh.mvc.repository.Service2Repository;
 import com.amsidh.mvc.service.Service2Service;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class Service2ServiceImpl implements Service2Service {
     @Override
     public Service2 getService2ById(Integer service2Id) {
         log.info("Inside getService2ById of Service2ServiceImpl class");
-        return service2Repository.findById(service2Id).orElseThrow();
+        return service2Repository.findById(service2Id).orElseThrow(() -> new Service2NotFound(String.format("Service2 with id {} not found", service2Id)));
     }
 
 }

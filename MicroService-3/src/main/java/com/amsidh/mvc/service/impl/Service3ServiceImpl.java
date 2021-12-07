@@ -1,6 +1,7 @@
 package com.amsidh.mvc.service.impl;
 
 import com.amsidh.mvc.entities.Service3;
+import com.amsidh.mvc.exception.Service3NotFound;
 import com.amsidh.mvc.repository.Service3Repository;
 import com.amsidh.mvc.service.Service3Service;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class Service3ServiceImpl implements Service3Service {
     @Override
     public Service3 getService3ById(Integer service3Id) {
         log.info("Inside getService3ById method Service3ServiceImpl class");
-        return service3Repository.findById(service3Id).orElseThrow();
+        return service3Repository.findById(service3Id).orElseThrow(() -> new Service3NotFound(String.format("Service3 with id {} not found", service3Id)));
     }
 
 }
