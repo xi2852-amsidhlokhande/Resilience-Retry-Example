@@ -1,18 +1,25 @@
 package com.amsidh.mvc.controller;
 
+import com.amsidh.mvc.domain.ResponseService1;
+import com.amsidh.mvc.domain.ResponseService2;
+import com.amsidh.mvc.entities.Service1;
+import com.amsidh.mvc.service.Service1Service;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
+import io.github.resilience4j.decorators.Decorators;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryRegistry;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
-import static net.logstash.logback.argument.StructuredArguments.kv;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,30 +27,41 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @Slf4j
 public class Service1Controller {
 
-    private final static String SERVICE2_URL = "http://localhost:8082/service2/sayHello4";
+    private final static String SERVICE2_URL = "http://localhost:8082/service2";
     private final RestTemplate restTemplate;
+    private final Service1Service service1Service;
 
-    @PostMapping("/sayHello1")
-    public String sayHello(@RequestBody String requestBody) throws Exception {
-        log.info("Calling Service2");
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(SERVICE2_URL, String.class);
-            log.info("Response from Service2 is {}", responseEntity.getBody(), kv("status", responseEntity.getStatusCodeValue()));
-        } catch (HttpClientErrorException httpClientErrorException) {
-            log.error(httpClientErrorException.getMessage());
-            throw httpClientErrorException;
-        } catch (RestClientResponseException restClientResponseException) {
-            log.error(restClientResponseException.getMessage());
-            throw restClientResponseException;
-        } catch (RestClientException restClientException) {
-            log.error(restClientException.getMessage());
-            throw restClientException;
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
 
-        return "Service-1 Message-1";
+    private final RetryRegistry retryRegistry;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
+
+    private int requestCount= 0;
+    @GetMapping("/{service1Id}")
+    public ResponseService1 getService1ById(@PathVariable("service1Id") Integer service1Id) {
+        log.info("Request No- " + requestCount++);
+        Service1 service1 = service1Service.getService1ById(service1Id);
+        ResponseService2 responseService2 = getResponseService2(service1.getService1Id());
+        return ResponseService1.builder().service2(responseService2)
+                .service1Id(service1.getService1Id())
+                .service1Message(service1.getService1Message())
+                .build();
     }
 
+    private ResponseService2 getResponseService2(Integer service2Id) {
+
+        Retry retry = retryRegistry.retry("service1");
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("service1");
+        log.info("Calling MicroService-2 API");
+        Supplier<ResponseService2> responseService2Supplier = () -> {
+            ResponseEntity<ResponseService2> responseService2ResponseEntity= this.restTemplate.getForEntity(SERVICE2_URL + "/" + service2Id, ResponseService2.class);
+            return responseService2ResponseEntity.getBody();
+        };
+        responseService2Supplier = Decorators.ofSupplier(responseService2Supplier)
+                .withCircuitBreaker(circuitBreaker)
+                .withRetry(retry)
+                .decorate();
+        return Try.ofSupplier(responseService2Supplier)
+                .recover(throwable -> null).get();
+    }
 
 }

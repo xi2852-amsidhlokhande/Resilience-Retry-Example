@@ -1,31 +1,3 @@
-spring:
-  main:
-    banner-mode: off
-  output:
-    ansi:
-      enabled: DETECT
-
-
-  sleuth:
-    baggage:
-      remote-fields: RequestId
-      correlation-fields:
-        - RequestId
-      tag-fields:
-        - RequestId
-    trace-id128: true
-
-
-
-logging:
-  level:
-    root: ERROR
-    org.springframework.web: ERROR
-    com.amsidh.mvc: DEBUG
-    org.hibernate: ERROR
-
-
-
 resilience4j:
   retry:
     configs:
@@ -65,7 +37,7 @@ resilience4j:
         sliding-window-type: COUNT_BASED
         minimum-number-of-calls: 10 #The number of calls after which the error rate is calculated. I have assigned it with a small value for test purpose.
         permittedNumberOfCallsInHalfOpenState: 3
-        waitDurationInOpenState: 30s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        waitDurationInOpenState: 5s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
         failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
         register-health-indicator: true
         automatic-transition-from-open-to-half-open-enabled: true
