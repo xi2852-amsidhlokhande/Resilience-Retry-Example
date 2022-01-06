@@ -14,10 +14,24 @@ resilience4j:
         ignoreExceptions:
           - io.github.resilience4j.circuitbreaker.CallNotPermittedException
     instances:
-      predicateExample:
-        maxRetryAttempts: 5
-        waitDuration: 5s
-        resultPredicate: com.amsidh.mvc.predicates.Service2APIResponsePredicate
+      service2APIRetry:
+        baseConfig: default
+        resultPredicate: com.amsidh.mvc.predicates.ResponseResultPredicate
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
+        minimum-number-of-calls: 10 #The number of calls after which the error rate is calculated. I have assigned it with a small value for test purpose.
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s #Time in milliseconds, in which the circuit breaker is to stay in open state before moving to half-open state
+        failureRateThreshold: 60 #The Threshold Percentage Above Which the Circuit Breaker will move from Closed to Open State.
+        automatic-transition-from-open-to-half-open-enabled: true
+    instances:
+      service2APICircuitBreaker:
+        baseConfig: default
+        record-failure-predicate: com.amsidh.mvc.predicates.RecordFailurePredicate
+
 
 logging:
   level:

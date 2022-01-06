@@ -1,5 +1,6 @@
 package com.amsidh.mvc.config;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.core.registry.EntryAddedEvent;
 import io.github.resilience4j.core.registry.EntryRemovedEvent;
 import io.github.resilience4j.core.registry.EntryReplacedEvent;
@@ -27,6 +28,25 @@ public class Resilience4jConfig {
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
+            }
+        };
+    }
+
+    @Bean
+    public RegistryEventConsumer<CircuitBreaker> getRegistryEventConsumerCircuitBreaker() {
+        return new RegistryEventConsumer<CircuitBreaker>() {
+
+            @Override
+            public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> log.info(event.toString()));
+            }
+
+            @Override
+            public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
+            }
+
+            @Override
+            public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
             }
         };
     }

@@ -1,8 +1,10 @@
 package com.amsidh.mvc.controller;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.decorators.Decorators;
+import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +24,7 @@ public class Service1Controller {
     private final static String SERVICE2_URL = "http://localhost:8082/service2/checkProgress";
     private RestTemplate restTemplate = new RestTemplate();
     private final RetryRegistry retryRegistry;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
 
 /*
     private final RetryRegistry retryRegistry;
@@ -62,12 +67,26 @@ public class Service1Controller {
 */
 
     @GetMapping(value = "/checkingService1Status")
-    @Retry(name = "predicateExample")
     public ResponseEntity<String> checkingService1Status() {
         log.info("Calling Service2 RestAPI {}", SERVICE2_URL);
-        ResponseEntity<String> response =  restTemplate.getForEntity(SERVICE2_URL, String.class);
-        log.info("Response received from Service2 with body {} and status {}", response.getBody(), response.getStatusCodeValue());
-        return ResponseEntity.ok(response.getBody());
+        return getStringResponseEntity();
+    }
+
+    private ResponseEntity<String> getStringResponseEntity() {
+        Retry retry = retryRegistry.retry("service2APIRetry");
+        CircuitBreaker circuitBreaker = circuitBreakerRegistry.circuitBreaker("service2APICircuitBreaker");
+        return Decorators.ofSupplier(() -> restTemplate.getForEntity(SERVICE2_URL, String.class))
+                .withCircuitBreaker(circuitBreaker)
+                .withRetry(retry)
+                .withFallback((responseEntity, throwable) -> {
+                    if (responseEntity != null) {
+                        return responseEntity;
+                    } else {
+                        Optional.ofNullable(throwable).ifPresent(exception-> log.error(exception.getLocalizedMessage()));
+                        return ResponseEntity.ok("");
+                    }
+                })
+                .decorate().get();
     }
 
 }
