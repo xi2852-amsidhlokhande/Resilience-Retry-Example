@@ -1,8 +1,8 @@
 package com.amsidh.mvc.controller;
 
 import io.github.resilience4j.decorators.Decorators;
-import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -62,20 +62,12 @@ public class Service1Controller {
 */
 
     @GetMapping(value = "/checkingService1Status")
+    @Retry(name = "predicateExample")
     public ResponseEntity<String> checkingService1Status() {
         log.info("Calling Service2 RestAPI {}", SERVICE2_URL);
-        ResponseEntity<String> response = getStringResponseEntity();
+        ResponseEntity<String> response =  restTemplate.getForEntity(SERVICE2_URL, String.class);
         log.info("Response received from Service2 with body {} and status {}", response.getBody(), response.getStatusCodeValue());
         return ResponseEntity.ok(response.getBody());
     }
 
-    private ResponseEntity<String> getStringResponseEntity() {
-        Retry retry = retryRegistry.retry("predicateExample");
-        return Decorators.ofSupplier(this::get).withRetry(retry).decorate().get();
-    }
-
-
-    private ResponseEntity<String> get() {
-        return restTemplate.getForEntity(SERVICE2_URL, String.class);
-    }
 }

@@ -16,11 +16,10 @@ resilience4j:
     instances:
       predicateExample:
         maxRetryAttempts: 5
-        waitDuration: 30s
+        waitDuration: 5s
         resultPredicate: com.amsidh.mvc.predicates.Service2APIResponsePredicate
-
-
 
 logging:
   level:
     ROOT: ERROR
+    com.amsidh.mvc: INFO
