@@ -1,0 +1,26 @@
+resilience4j:
+  retry:
+    configs:
+      default:
+        maxAttempts: 5
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        exponentialMaxWaitDuration: 10s
+        retryExceptions:
+          - org.springframework.web.client.ResourceAccessException
+          - java.io.IOException
+          - org.springframework.web.client.HttpServerErrorException
+        ignoreExceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+    instances:
+      predicateExample:
+        maxRetryAttempts: 5
+        waitDuration: 30s
+        resultPredicate: com.amsidh.mvc.predicates.Service2APIResponsePredicate
+
+
+
+logging:
+  level:
+    ROOT: ERROR

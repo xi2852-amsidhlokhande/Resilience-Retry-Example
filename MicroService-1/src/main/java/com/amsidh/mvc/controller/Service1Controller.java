@@ -1,10 +1,8 @@
 package com.amsidh.mvc.controller;
 
+import io.github.resilience4j.decorators.Decorators;
 import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
-import io.vavr.CheckedFunction0;
-import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,6 +19,7 @@ public class Service1Controller {
 
     private final static String SERVICE2_URL = "http://localhost:8082/service2/checkProgress";
     private RestTemplate restTemplate = new RestTemplate();
+    private final RetryRegistry retryRegistry;
 
 /*
     private final RetryRegistry retryRegistry;
@@ -74,27 +70,12 @@ public class Service1Controller {
     }
 
     private ResponseEntity<String> getStringResponseEntity() {
-        RetryConfig retryConfig = RetryConfig.<ResponseEntity<String>>custom()
-                .maxAttempts(5)
-                .waitDuration(Duration.of(4, ChronoUnit.SECONDS))
-                .retryOnResult(responseEntity -> {
-                    return responseEntity.getBody().contains("INPROGRESS");
-                })
-                .build();
+        Retry retry = retryRegistry.retry("predicateExample");
+        return Decorators.ofSupplier(this::get).withRetry(retry).decorate().get();
+    }
 
 
-        RetryRegistry registry = RetryRegistry.of(retryConfig);
-        Retry retry = registry.retry("service2RetryConfig");
-        retry.getEventPublisher().onRetry( eventConsumer-> {
-            log.info("Received INPROGRESS response from Service2 API so retrying with iteration {}", eventConsumer.getNumberOfRetryAttempts());
-        });
-
-        CheckedFunction0<ResponseEntity<String>> responseSupplier = Retry.decorateCheckedSupplier(retry, () -> {
-            return restTemplate.getForEntity(SERVICE2_URL, String.class);
-        });
-
-        ResponseEntity<String> responseEntity = Try.of(responseSupplier).get();
-
-        return responseEntity;
+    private ResponseEntity<String> get() {
+        return restTemplate.getForEntity(SERVICE2_URL, String.class);
     }
 }
