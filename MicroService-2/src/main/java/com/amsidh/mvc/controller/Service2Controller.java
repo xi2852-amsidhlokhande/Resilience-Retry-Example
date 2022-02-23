@@ -16,7 +16,7 @@ public class Service2Controller {
     @GetMapping("/checkProgress")
     public ResponseEntity<String> checkProgress() {
         log.info("Inside checkProgress method of Service2Controller");
-        String status = "PROGRESS";
+        String status = "INPROGRESS";
         return ResponseEntity.ok(status);
     }
 }

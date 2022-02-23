@@ -31,6 +31,7 @@ resilience4j:
       service2APICircuitBreaker:
         baseConfig: default
         record-failure-predicate: com.amsidh.mvc.predicates.RecordFailurePredicate
+        writableStackTraceEnabled: true
 
 
 logging:
